@@ -1,0 +1,41 @@
+{
+  "name": "nexora-ai",
+  "version": "2.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "db:migrate": "prisma migrate dev",
+    "db:push": "prisma db push",
+    "worker": "tsx workers/video-worker.ts",
+    "video:preview": "remotion preview remotion/index.ts"
+  },
+  "dependencies": {
+    "@prisma/client": "^5.19.0",
+    "@remotion/bundler": "^4.0.0",
+    "@remotion/cli": "^4.0.0",
+    "@remotion/player": "^4.0.0",
+    "@remotion/renderer": "^4.0.0",
+    "bullmq": "^5.12.0",
+    "cheerio": "^1.0.0",
+    "framer-motion": "^11.5.0",
+    "ioredis": "^5.4.0",
+    "next": "^14.2.5",
+    "next-themes": "^0.3.0",
+    "nodemailer": "^6.9.14",
+    "prisma": "^5.19.0",
+    "react": "^18.3.0",
+    "react-dom": "^18.3.0",
+    "remotion": "^4.0.0",
+    "tailwindcss": "^3.4.0",
+    "zod": "^3.23.0"
+  },
+  "devDependencies": {
+    "@types/nodemailer": "^6.4.15",
+    "@types/node": "^20.0.0",
+    "@types/react": "^18.3.0",
+    "tsx": "^4.16.0",
+    "typescript": "^5.5.0"
+  }
+}

@@ -1,0 +1,100 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  name      String?
+  role      String   @default("MEMBER")
+  projects  Project[]
+  createdAt DateTime @default(now())
+}
+
+model Project {
+  id          String     @id @default(cuid())
+  name        String
+  brand       String?
+  industry    String?
+  ownerId     String
+  owner       User       @relation(fields: [ownerId], references: [id])
+  jobs        Job[]
+  campaigns   Campaign[]
+  brandBrain  BrandBrain?
+  createdAt   DateTime   @default(now())
+}
+
+model BrandBrain {
+  id          String   @id @default(cuid())
+  projectId   String   @unique
+  project     Project  @relation(fields: [projectId], references: [id])
+  voice       String   @default("confident, clear, premium")
+  audience    String   @default("business decision-makers")
+  products    String
+  competitors String
+  bannedWords String
+  facts       String
+  updatedAt   DateTime @updatedAt
+}
+
+model ContactSubmission {
+  id        String   @id @default(cuid())
+  name      String
+  email     String
+  company   String?
+  phone     String?
+  subject   String
+  message   String
+  source    String   @default("website")
+  status    String   @default("new")
+  priority  String   @default("normal")
+  aiSummary String?
+  aiNextAction String?
+  createdAt DateTime @default(now())
+}
+
+model InboxMessage {
+  id           String   @id @default(cuid())
+  contactId    String?
+  direction    String   @default("inbound")
+  channel      String   @default("email")
+  subject      String?
+  body         String
+  fromName     String?
+  fromEmail    String?
+  status       String   @default("unread")
+  aiCategory   String?
+  aiSentiment  String?
+  aiSummary    String?
+  createdAt    DateTime @default(now())
+}
+
+model Job {
+  id        String   @id @default(cuid())
+  projectId String
+  project   Project  @relation(fields: [projectId], references: [id])
+  type      String
+  status    String   @default("QUEUED")
+  input     String
+  output    String?
+  progress  Int      @default(0)
+  error     String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Campaign {
+  id        String   @id @default(cuid())
+  projectId String
+  project   Project  @relation(fields: [projectId], references: [id])
+  name      String
+  objective String
+  channels  String
+  status    String   @default("draft")
+  createdAt DateTime @default(now())
+}
