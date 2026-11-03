@@ -1,0 +1,8 @@
+{
+  "name": "Nexora AI",
+  "short_name": "Nexora",
+  "start_url": "/dashboard",
+  "display": "standalone",
+  "background_color": "#06060d",
+  "theme_color": "#6D5EF8"
+}

@@ -1,20 +1,8 @@
 const CACHE = "nexora-v1";
-const OFFLINE_URL = "/offline.html";
 
 self.addEventListener("install", (event) => {
-  event.waitUntil(
-    caches.open(CACHE).then((cache) => cache.addAll(["/", OFFLINE_URL]))
-  );
+  event.waitUntil(caches.open(CACHE).then((c) => c.addAll(["/", "/offline.html"])));
   self.skipWaiting();
-});
-
-self.addEventListener("activate", (event) => {
-  event.waitUntil(
-    caches.keys().then((keys) =>
-      Promise.all(keys.filter((key) => key !== CACHE).map((key) => caches.delete(key)))
-    )
-  );
-  self.clients.claim();
 });
 
 self.addEventListener("fetch", (event) => {
@@ -22,11 +10,11 @@ self.addEventListener("fetch", (event) => {
 
   event.respondWith(
     fetch(event.request)
-      .then((response) => {
-        const clone = response.clone();
-        caches.open(CACHE).then((cache) => cache.put(event.request, clone));
-        return response;
+      .then((res) => {
+        const clone = res.clone();
+        caches.open(CACHE).then((c) => c.put(event.request, clone));
+        return res;
       })
-      .catch(() => caches.match(event.request).then((cached) => cached || caches.match(OFFLINE_URL)))
+      .catch(() => caches.match(event.request).then((r) => r || caches.match("/offline.html")))
   );
 });

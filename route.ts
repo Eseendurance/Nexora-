@@ -12,31 +12,18 @@ const schema = z.object({
 
 export async function POST(request: Request) {
   const parsed = schema.safeParse(await request.json());
-
-  if (!parsed.success) {
-    return NextResponse.json({ error: "Invalid request" }, { status: 400 });
-  }
+  if (!parsed.success) return NextResponse.json({ error: "Invalid request" }, { status: 400 });
 
   const result = await runGemini({
     task: "bizdev",
     prompt: `Objective: ${parsed.data.objective}.
-Target company: ${parsed.data.company}.
+Company: ${parsed.data.company}.
 Website: ${parsed.data.website ?? "Not provided"}.
-Our offer: ${parsed.data.offer}.
-Target contact role: ${parsed.data.targetRole}.
+Offer: ${parsed.data.offer}.
+Target role: ${parsed.data.targetRole}.
 
-Return JSON:
-{
-  "opportunityScore": number,
-  "qualification": string,
-  "painPoints": string[],
-  "valueHypothesis": string,
-  "subjectLines": string[],
-  "outreachMessage": string,
-  "followUpSequence": string[],
-  "objectionHandling": string[],
-  "nextActions": string[]
-}`,
+Return JSON with opportunityScore, qualification, painPoints, valueHypothesis,
+subjectLines, outreachMessage, followUpSequence, objectionHandling, nextActions.`,
   });
 
   return NextResponse.json(result);

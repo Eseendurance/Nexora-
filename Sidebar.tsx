@@ -28,16 +28,15 @@ export default function Sidebar() {
 
       <nav className="flex flex-1 flex-col gap-1">
         {nav.map((item) => {
-          const active =
-            pathname === item.href ||
+          const active = pathname === item.href ||
             (item.href !== "/dashboard" && pathname.startsWith(item.href));
 
           return (
             <Link
               key={item.href}
               href={item.href}
-              className={`relative flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium transition ${
-                active ? "text-[var(--text)]" : "text-[var(--muted)] hover:text-[var(--text)]"
+              className={`relative flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium ${
+                active ? "text-[var(--text)]" : "text-[var(--muted)]"
               }`}
             >
               {active && (

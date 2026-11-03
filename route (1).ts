@@ -14,10 +14,7 @@ const schema = z.object({
 
 export async function POST(request: Request) {
   const parsed = schema.safeParse(await request.json());
-
-  if (!parsed.success) {
-    return NextResponse.json({ error: "Invalid input" }, { status: 400 });
-  }
+  if (!parsed.success) return NextResponse.json({ error: "Invalid input" }, { status: 400 });
 
   const brain = await db.brandBrain.upsert({
     where: { projectId: parsed.data.projectId },
