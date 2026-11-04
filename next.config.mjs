@@ -1,5 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  serverExternalPackages: ["bullmq", "ioredis"],
   headers: async () => [
     {
       source: "/sw.js",
