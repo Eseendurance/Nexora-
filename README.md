@@ -50,9 +50,10 @@ voice generation and MP4 rendering.
   connection strings from Neon or your chosen managed provider; do not commit
   credentials.
 - Set both variables for the Vercel Production environment, then pull the
-  environment locally with Vercel CLI and run `npm run db:migrate` once to
-  create the tables. Verify `/api/ready` returns `{"status":"ready"}` after
-  deploying with the database configured.
+  environment locally with Vercel CLI (`vercel link`, then
+  `vercel env pull .env`) and run `npm run db:migrate` once to create the
+  tables. Keep the pulled `.env` private and uncommitted. Verify `/api/ready`
+  returns `{"status":"ready"}` after deploying with the database configured.
 - Configure SMTP and Redis availability monitoring before enabling those
   optional integrations in production.
 - Configure reverse-proxy HTTPS so production session cookies remain secure.
