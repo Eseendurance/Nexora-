@@ -23,7 +23,14 @@ export default function AuthForm({ mode }: { mode: "login" | "register" }) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(body),
       });
-      const data = await response.json();
+      const responseBody = await response.text();
+      let data: { error?: string };
+      try {
+        data = JSON.parse(responseBody);
+      } catch {
+        setError(`The server returned an unexpected response (HTTP ${response.status}). Please try again.`);
+        return;
+      }
       if (!response.ok) {
         setError(data.error ?? "Unable to complete sign in.");
         return;
@@ -31,7 +38,7 @@ export default function AuthForm({ mode }: { mode: "login" | "register" }) {
       router.replace("/dashboard");
       router.refresh();
     } catch {
-      setError("The server could not be reached. Please try again.");
+      setError("Could not contact the server. Check your connection and try again.");
     } finally {
       setBusy(false);
     }

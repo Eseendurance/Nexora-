@@ -1,21 +1,25 @@
 # Nexora AI
 
 Nexora AI is a self-hosted Next.js workspace for AI-assisted business workflows.
-This project uses the Next.js App Router, TypeScript, Prisma, SQLite, Gemini,
+This project uses the Next.js App Router, TypeScript, Prisma, PostgreSQL, Gemini,
 Nodemailer, Redis/BullMQ, and Remotion.
 
 ## Local setup
 
 1. Install Node.js 20.9 or later and Redis.
-2. Copy `.env.example` to `.env` and set `DATABASE_URL`.
+2. Copy `.env.example` to `.env` and set `DATABASE_URL` and `DIRECT_URL` for your
+   PostgreSQL database. `DATABASE_URL` should use the provider's pooled endpoint
+   when available; `DIRECT_URL` should use its direct endpoint for migrations.
 3. Add a Google Gemini API key to `GEMINI_API_KEY`.
 4. Install dependencies with `npm install`.
-5. Apply the checked-in SQLite migration with `npx prisma migrate deploy`.
+5. Apply the checked-in PostgreSQL migrations with `npm run db:migrate`.
 6. Start the application with `npm run dev`.
 7. Create the first account and workspace at `/register`.
 
-For iterative local schema changes, use `npm run db:push`. Back up any existing
+For iterative local schema changes, use `npm run db:dev`. Back up any existing
 database before applying schema changes.
+The checked-in migrations create a fresh PostgreSQL database; SQLite data from
+an earlier local installation must be exported and imported separately.
 
 The database-backed sessions use secure, HTTP-only cookies. Passwords are hashed
 with Node.js `scrypt`; session tokens are random and only their SHA-256 hashes
@@ -41,10 +45,14 @@ voice generation and MP4 rendering.
 ## Configuration and deployment notes
 
 - Keep `.env` out of version control; `.env.example` contains placeholders only.
-- Use a persistent volume for the SQLite database and generated media.
-- To move to PostgreSQL, change the Prisma datasource provider to `postgresql`,
-  set `DATABASE_URL`, generate a PostgreSQL migration, and validate it against a
-  backup before deploying.
+- Configure both `DATABASE_URL` (pooled runtime connection) and `DIRECT_URL`
+  (direct connection for Prisma migrations) in Vercel. Use the PostgreSQL
+  connection strings from Neon or your chosen managed provider; do not commit
+  credentials.
+- Set both variables for the Vercel Production environment, then pull the
+  environment locally with Vercel CLI and run `npm run db:migrate` once to
+  create the tables. Verify `/api/ready` returns `{"status":"ready"}` after
+  deploying with the database configured.
 - Configure SMTP and Redis availability monitoring before enabling those
   optional integrations in production.
 - Configure reverse-proxy HTTPS so production session cookies remain secure.
