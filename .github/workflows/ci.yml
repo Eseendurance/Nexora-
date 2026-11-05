@@ -17,16 +17,16 @@ jobs:
       - run: npm ci
       - run: npx prisma validate
         env:
-          DATABASE_URL: postgresql://user:password@localhost:5432/nexora?schema=public
+          POSTGRES_URL: postgresql://user:password@localhost:5432/nexora?schema=public
           DIRECT_URL: postgresql://user:password@localhost:5432/nexora?schema=public
       - run: npx prisma generate
         env:
-          DATABASE_URL: postgresql://user:password@localhost:5432/nexora?schema=public
+          POSTGRES_URL: postgresql://user:password@localhost:5432/nexora?schema=public
           DIRECT_URL: postgresql://user:password@localhost:5432/nexora?schema=public
       - run: npm test
       - run: npx tsc --noEmit
       - run: npm audit --omit=dev
       - run: npm run build
         env:
-          DATABASE_URL: postgresql://user:password@localhost:5432/nexora?schema=public
+          POSTGRES_URL: postgresql://user:password@localhost:5432/nexora?schema=public
           DIRECT_URL: postgresql://user:password@localhost:5432/nexora?schema=public

@@ -7,8 +7,8 @@ Nodemailer, Redis/BullMQ, and Remotion.
 ## Local setup
 
 1. Install Node.js 20.9 or later and Redis.
-2. Copy `.env.example` to `.env` and set `DATABASE_URL` and `DIRECT_URL` for your
-   PostgreSQL database. `DATABASE_URL` should use the provider's pooled endpoint
+2. Copy `.env.example` to `.env` and set `POSTGRES_URL` and `DIRECT_URL` for your
+   PostgreSQL database. `POSTGRES_URL` should use the provider's pooled endpoint
    when available; `DIRECT_URL` should use its direct endpoint for migrations.
 3. Add a Google Gemini API key to `GEMINI_API_KEY`.
 4. Install dependencies with `npm install`.
@@ -45,10 +45,11 @@ voice generation and MP4 rendering.
 ## Configuration and deployment notes
 
 - Keep `.env` out of version control; `.env.example` contains placeholders only.
-- Configure both `DATABASE_URL` (pooled runtime connection) and `DIRECT_URL`
+- Configure both `POSTGRES_URL` (pooled runtime connection) and `DIRECT_URL`
   (direct connection for Prisma migrations) in Vercel. Use the PostgreSQL
   connection strings from Neon or your chosen managed provider; do not commit
-  credentials.
+  credentials. The app reads `POSTGRES_URL`, matching the Neon/Vercel
+  integration variable name.
 - Set both variables for the Vercel Production environment, then pull the
   environment locally with Vercel CLI (`vercel link`, then
   `vercel env pull .env`) and run `npm run db:migrate` once to create the
